@@ -14,5 +14,5 @@ def get_transforms(dataset):
             transforms.ToTensor(),
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
         ])
-    else:
+    else: 
         raise ValueError(f"Unknown dataset: {dataset}. Choose 'fashion_mnist' or 'cifar10'.")
