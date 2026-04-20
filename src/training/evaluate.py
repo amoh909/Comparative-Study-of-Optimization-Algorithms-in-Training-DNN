@@ -1,7 +1,6 @@
 import torch 
-from .metrics import calculate_accuracy
 
-def evaluate(model, dataloader, criterion, device):
+def evaluate(model, dataloader, lossfn, device):
     model.eval()
     current_loss = 0.0
     total_correct = 0
@@ -12,13 +11,13 @@ def evaluate(model, dataloader, criterion, device):
             inputs, labels = inputs.to(device), labels.to(device)
             
             outputs = model(inputs)
-            loss = criterion(outputs, labels)
+            loss = lossfn(outputs, labels)
 
             batch_size = inputs.size(0)
             current_loss += loss.item() * batch_size
             
-            acc_percentage = calculate_accuracy(outputs, labels)
-            total_correct += (acc_percentage / 100.0) * batch_size
+            preds = outputs.argmax(dim=1)
+            total_correct += (preds == labels).sum().item()
             total_samples += batch_size
 
     avg_loss = current_loss / total_samples
